@@ -3,6 +3,7 @@
 #include<SFML/Graphics.hpp>
 #include"board.h"
 #include"Queen.h"
+#include"Rook.h"
 
 using namespace sf;
 using namespace std;
@@ -10,15 +11,14 @@ using namespace std;
 class MainLoop {
 public:
 	Map board;
-	Queen whiteQueen;
 	Queen blackQueen;
 	RenderWindow window;
+	Rook rook;
 
 	MainLoop()
 	{
 		window.create(VideoMode(512, 512), "Chess Game");
-		blackQueen = new Queen(true);
-		whiteQueen = new Queen(false);
+
 		Loop();
 	}
 
@@ -26,16 +26,18 @@ public:
 	{
 		while (window.isOpen())
 		{
-			sf::Event event;
+			Event event;
 
 			while (window.pollEvent(event))
 			{
 				if (event.type == sf::Event::Closed)
 					window.close();
 			}
-			window.close();
+
+			window.clear();
+			window.draw(board.boardS);
 			window.draw(blackQueen.queenS);
-			window.draw(whiteQueen.queenS);
+			window.draw(rook.rookS);
 			window.display();
 		}
 	}

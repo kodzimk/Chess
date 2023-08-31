@@ -13,7 +13,7 @@ using namespace sf;
 
 class Map {
 public:
-	string map[8][8] = {
+	string map[8] = {
 		"12345321",
 		"00000000",
 		"        ",
@@ -23,7 +23,7 @@ public:
 		"PPPPPPPP",
 		"RKWFQWKR"
 	};
-
+public:
 	Texture board;
 	Sprite boardS;
 

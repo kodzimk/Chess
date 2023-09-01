@@ -53,7 +53,7 @@ public:
 
 
 
-	int wrookIndex = 0,brookIndex = 0;
+	int wrookIndex = 0,brookIndex = 0,whitePieceCount = 16,BlackPieceCount = 16;
 	int whiteIndex = 0,blackIndex = 0,wBK = 0,wWK=0;
 	int width = 0, height = 200;
 	int clickX, clickY = 0;
@@ -68,6 +68,20 @@ public:
 
 	void init()
 	{
+		refWhiteQ = nullptr;
+		refBlackQ = nullptr;
+		refWhiteBishop = nullptr;
+		refBlackBishop = nullptr;
+		refWhitePawn = nullptr;
+		refBlackP = nullptr;
+		refBlackKing = nullptr;
+		refWhiteKnight = nullptr;
+		refWhitRook = nullptr;
+		refWhiteKing = nullptr;
+		refBlackRook = nullptr;
+		refBlackKnght = nullptr;
+
+
 		texture.loadFromFile("board.png");
 		for (int i = 0; i < 32; i++)
 		{
@@ -209,9 +223,10 @@ public:
 
 	void CheckBoard()
 	{
-		int i = (int(clickY / 100 ));
-		int j = (int(clickX / 100));
-		if (refWhitePawn != NULL)
+		ClickedToPiece = false;
+		int i = clickY/100;
+		int j = clickX/100;
+		if (refWhitePawn != nullptr)
 		{
 			if (board.map[i][j] == 0)
 			{
@@ -221,17 +236,32 @@ public:
 					board.map[i][j] = 1;
 				}
 			}
+			refWhitePawn = nullptr;
 		}
-		if (refBlackP != NULL)
+		if (refBlackP != nullptr)
 		{
+			if (board.map[i][j] == 1)
+			{
+				for (int i = 0; i < 8; i++)
+				{
+					if (whitePawns[i].sprite.getGlobalBounds().contains(j,i))
+					{
+						whitePieceCount--;
+						whitePawns[i].sprite.setPosition(-1000, -100);
+						(refBlackP)->blackPawnS.setPosition(j * 100, i * 100);
+						board.map[i][j] = -1;
+					}
+				}
+			}
 			if (board.map[i][j] == 0)
 			{
 				if (refBlackP->blackPawnS.getPosition().y / 100  - i<= 2)
 				{
-					(refWhitePawn)->blackPawnS.setPosition(j * 100, i * 100);
+					(refBlackP)->blackPawnS.setPosition(j * 100, i * 100);
 					board.map[i][j] = -1;
 				}
 			}
+			refBlackP = nullptr;
 		}
 	}
 
@@ -251,20 +281,45 @@ public:
 			{
 				for (int i = 0; i < 8; i++)
 				{
-					if (whitePawns[i].sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
+					if (!ClickedToPiece)
 					{
-						refWhitePawn = &whitePawns[i];
-						ClickedToPiece = true;
+						if (whitePawns[i].sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
+						{
+							refWhitePawn = &whitePawns[i];
+							ClickedToPiece = true;
+							break;
+						}
+					    else if (blacksPawn[i].blackPawnS.getGlobalBounds().contains(mousePos.x, mousePos.y))
+						{
+							refBlackP = &blacksPawn[i];
+							ClickedToPiece = true;
+							break;
+						}
 					}
-					if (blacksPawn[i].blackPawnS.getGlobalBounds().contains(mousePos.x, mousePos.y))
+					else 
 					{
-						refBlackP = &blacksPawn[i];
-						ClickedToPiece = true;
+						if (whitePawns[i].sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
+						{
+							clickX = (int)whitePawns[i].sprite.getPosition().x;
+							clickY = (int)whitePawns[i].sprite.getPosition().y;
+							CheckBoard();
+							break;
+						}
+						else if (blacksPawn[i].blackPawnS.getGlobalBounds().contains(mousePos.x, mousePos.y))
+						{
+							clickX = (int)blacksPawn[i].blackPawnS.getPosition().x;
+							clickY = (int)blacksPawn[i].blackPawnS.getPosition().y;
+							CheckBoard();
+							break;
+						}
 					}
+					
 				}
 
+			
 				for (int i = 0; i < 32; i++)
 				{
+					
 					if (sprite[i].getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
 						if (ClickedToPiece == true)
@@ -280,5 +335,33 @@ public:
 			
 			Show();
 		}
+	}
+
+	~MainLoop()
+	{
+		if(refBlackBishop!=nullptr)
+		delete refBlackBishop;
+		if(refWhiteBishop!=nullptr)
+		delete refWhiteBishop;
+		if(refBlackKing!=nullptr)
+		delete refBlackKing;
+		if (refWhiteKing != nullptr)
+		delete refWhiteKing;
+		if (refBlackP != nullptr)
+			delete refBlackP;
+		if (refBlackQ != nullptr)
+			delete refBlackQ;
+		if (refWhitePawn != nullptr)
+			delete refWhitePawn;
+		if (refWhiteQ != nullptr)
+			delete refWhiteQ;
+		if (refBlackKnght != nullptr)
+			delete refBlackKnght;
+		if (refWhiteKnight != nullptr)
+			delete refWhiteKnight;
+		if (refBlackRook != nullptr)
+			delete refBlackRook;
+		if (refWhitRook != nullptr)
+			delete refWhitRook;
 	}
 };

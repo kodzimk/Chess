@@ -2,41 +2,33 @@
 #include<SFML/Graphics.hpp>
 #include"board.h"
 
-
 using namespace sf;
 using namespace std;
 
-
-class Queen {
+class King {
 public:
 	Texture queen;
-	Map map;
 	Sprite queenS;
+	Texture blackQu;
+	Sprite blackQuS;
 
-	Queen()
+
+	King()
 	{
-		queen.loadFromFile("piece.png");
-		queenS.setTexture(queen);
-		queenS.setTextureRect(IntRect(90,0,60,100));
-		queenS.setScale(1.5, 0.64);
+		blackQu.loadFromFile("RegeNegru.png");
+		blackQuS.setTexture(blackQu);
 
-	
-			for (int i = 0; i < 8; i++)
-			{
-				for (int j = 0; j < 8; j++)
-				{
-					if (map.map[i][j] == '5')
-					{
-						queenS.setPosition(j * 64, i * 64);
-						
-					}
-				}
-			}
+		queen.loadFromFile("RegeAlb.png");
+		queenS.setTexture(queen);
 	}
 
 	void whiteMove()
 	{
        
+	}
+	void blackMove()
+	{
+
 	}
 
 };

@@ -13,15 +13,15 @@ using namespace sf;
 
 class Map {
 public:
-	string map[8] = {
-		"12345321",
-		"00000000",
-		"        ",
-		"        ",
-		"        ",
-		"        ",
-		"PPPPPPPP",
-		"RKWFQWKR"
+	int map[8][8] = {
+		6,2,3,4,5,3,2,6,
+		1,1,1,1,1,1,1,1,
+		0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,
+		-1,-1,-1,-1,-1,-1,-1,-1,
+		-6,-2,-3,-4,-5,-3,-2,-6
 	};
 public:
 	Texture board;
@@ -31,6 +31,5 @@ public:
 	{
 		board.loadFromFile("board.png");
 		boardS.setTexture(board);
-		boardS.setScale(0.25, 0.25);
 	}
 };

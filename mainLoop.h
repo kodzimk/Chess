@@ -244,86 +244,6 @@ public:
 		int I = 0, J = 0;
 		if (refWhitePawn != nullptr)
 		{
-			/*if (i - refWhitePawn->sprite.getPosition().y / 100 == 1 && (j - refWhitePawn->sprite.getPosition().x / 100 == 1 || j - refWhitePawn->sprite.getPosition().x / 100 == -1))
-			{
-				if (board.map[i][j] == -1)
-				{
-					for (int k = 0; k < 8; k++)
-					{
-						if (blacksPawn[k].sprite.getGlobalBounds().contains(j, i))
-						{
-							I = ((int)refWhitePawn->sprite.getPosition().y) / 100;
-							J = ((int)refWhitePawn->sprite.getPosition().x) / 100;
-							blacksPawn[k].sprite.setScale(0, 0);
-							refWhitePawn->sprite.setPosition(j * 100, i * 100);
-							BlackPieceCount--;
-							board.map[i][j] = 1;
-							board.map[I][J] = 0;
-						}
-					}
-				}
-				if (board.map[i][j] == -2)
-				{
-					if (blackKnightF.blackS.getGlobalBounds().contains(j, i))
-					{
-						I = ((int)refWhitePawn->sprite.getPosition().y) / 100;
-						J = ((int)refWhitePawn->sprite.getPosition().x) / 100;
-						blackKnightF.blackS.setScale(0, 0);
-						refWhitePawn->sprite.setPosition(j * 100, i * 100);
-						BlackPieceCount--;
-						board.map[i][j] = 1;
-						board.map[I][J] = 0;
-					}
-					if (blackLnightS.blackS.getGlobalBounds().contains(j, i))
-					{
-						I = ((int)refWhitePawn->sprite.getPosition().y) / 100;
-						J = ((int)refWhitePawn->sprite.getPosition().x) / 100;
-						blackLnightS.blackS.setScale(0, 0);
-						refWhitePawn->sprite.setPosition(j * 100, i * 100);
-						BlackPieceCount--;
-						board.map[i][j] = 1;
-						board.map[I][J] = 0;
-					}
-				}
-				if (board.map[i][j] == -3)
-				{
-					if (blackBishopF.blackS.getGlobalBounds().contains(j, i))
-					{
-						I = ((int)refWhitePawn->sprite.getPosition().y) / 100;
-						J = ((int)refWhitePawn->sprite.getPosition().x) / 100;
-						blackBishopF.blackS.setScale(0, 0);
-						refWhitePawn->sprite.setPosition(j * 100, i * 100);
-						BlackPieceCount--;
-						board.map[i][j] = 1;
-						board.map[I][J] = 0;
-					}
-					if (blackBishopS.blackS.getGlobalBounds().contains(j, i))
-					{
-						I = ((int)refWhitePawn->sprite.getPosition().y) / 100;
-						J = ((int)refWhitePawn->sprite.getPosition().x) / 100;
-						blackBishopS.blackS.setScale(0, 0);
-						refWhitePawn->sprite.setPosition(j * 100, i * 100);
-						BlackPieceCount--;
-						board.map[i][j] = 1;
-						board.map[I][J] = 0;
-					}
-				}
-				if (board.map[i][j] == -4)
-				{
-					if (blackQueen.blackS.getGlobalBounds().contains(j, i))
-					{
-						I = ((int)refWhitePawn->sprite.getPosition().y) / 100;
-						J = ((int)refWhitePawn->sprite.getPosition().x) / 100;
-						blackQueen.blackS.setScale(0, 0);
-						refWhitePawn->sprite.setPosition(j * 100, i * 100);
-						BlackPieceCount--;
-						board.map[i][j] = 1;
-						board.map[I][J] = 0;
-					}
-				
-				}
-
-			}*/
 			 if (board.map[i][j] == 0)
 			{
 				if (i - refWhitePawn->sprite.getPosition().y / 100 <= 2)
@@ -337,90 +257,29 @@ public:
 					
 				}
 			}
+
+				 if (board.map[i][j] == -1)
+				 {
+					 for (int k = 0; k < 8; k++)
+					 {
+						 if (i == (((int)blacksPawn[i].blackPawnS.getPosition().y) / 100) && j == (((int)blacksPawn[i].blackPawnS.getPosition().x) / 100))
+						 {
+							 blacksPawn[i].blackPawnS.setScale(0, 0);
+;							 J = ((int)refWhitePawn->sprite.getPosition().x) / 100;
+							 I = ((int)refWhitePawn->sprite.getPosition().y) / 100;
+							 (refWhitePawn)->sprite.setPosition(j * 100, i * 100);
+							 board.map[i][j] = 1;
+							 board.map[I][J] = 0;
+							 whiteMove = false;
+						 }
+					 }
+				 }
+			 
+
 			refWhitePawn = nullptr;
 		}
 		if (refBlackP != nullptr)
 		{
-			/*if (i - refBlackP->sprite.getPosition().y / 100 == 1 && (j - refBlackP->sprite.getPosition().x / 100 == 1 || j - refBlackP->sprite.getPosition().x / 100 == -1))
-			{
-				if (board.map[i][j] == 1)
-				{
-					for (int k = 0; k < 8; k++)
-					{
-						if (whitePawns[k].sprite.getGlobalBounds().contains(j, i))
-						{
-							I = ((int)refBlackP->sprite.getPosition().y) / 100;
-							J = ((int)refBlackP->sprite.getPosition().x) / 100;
-							whitePawns[k].sprite.setScale(0, 0);
-							refBlackP->sprite.setPosition(j * 100, i * 100);
-							whitePieceCount--;
-							board.map[i][j] = -1;
-							board.map[I][J] = 0;
-						}
-					}
-				}
-				if (board.map[i][j] == 2)
-				{
-					if (whiteKnightF.whiteS.getGlobalBounds().contains(j, i))
-					{
-						I = ((int)refBlackP->sprite.getPosition().y) / 100;
-						J = ((int)refBlackP->sprite.getPosition().x) / 100;
-						whiteKnightF.blackS.setScale(0, 0);
-						refBlackP->sprite.setPosition(j * 100, i * 100);
-						whitePieceCount--;
-						board.map[i][j] = -1;
-						board.map[I][J] = 0;
-					}
-					if (whiteKnightS.whiteS.getGlobalBounds().contains(j, i))
-					{
-						I = ((int)refBlackP->sprite.getPosition().y) / 100;
-						J = ((int)refBlackP->sprite.getPosition().x) / 100;
-						whiteKnightS.whiteS.setScale(0, 0);
-						refBlackP->sprite.setPosition(j * 100, i * 100);
-						whitePieceCount--;
-						board.map[i][j] = -1;
-						board.map[I][J] = 0;
-					}
-				}
-				if (board.map[i][j] == -3)
-				{
-					if (whiteBishopF.whiteS.getGlobalBounds().contains(j, i))
-					{
-						I = ((int)refBlackP->sprite.getPosition().y) / 100;
-						J = ((int)refBlackP->sprite.getPosition().x) / 100;
-						whiteBishopF.whiteS.setScale(0, 0);
-						refBlackP->sprite.setPosition(j * 100, i * 100);
-						whitePieceCount--;
-						board.map[i][j] = -1;
-						board.map[I][J] = 0;
-					}
-					if (whiteBishopS.blackS.getGlobalBounds().contains(j, i))
-					{
-						I = ((int)refBlackP->sprite.getPosition().y) / 100;
-						J = ((int)refBlackP->sprite.getPosition().x) / 100;
-						whiteBishopS.whiteS.setScale(0, 0);
-						refBlackP->sprite.setPosition(j * 100, i * 100);
-						whitePieceCount--;
-						board.map[i][j] =- 1;
-						board.map[I][J] = 0;
-					}
-				}
-				if (board.map[i][j] == -4)
-				{
-					if (whiteQueen.whiteS.getGlobalBounds().contains(j, i))
-					{
-						I = ((int)refBlackP->sprite.getPosition().y) / 100;
-						J = ((int)refBlackP->sprite.getPosition().x) / 100;
-						whiteQueen.blackS.setScale(0, 0);
-						refBlackP->sprite.setPosition(j * 100, i * 100);
-						whitePieceCount--;
-						board.map[i][j] = -1;
-						board.map[I][J] = 0;
-					}
-
-				}
-
-			}*/
 			if (board.map[i][j] == 0)
 			{
 				if (refBlackP->blackPawnS.getPosition().y / 100  - i<= 2)
@@ -903,8 +762,31 @@ public:
 			{
 				if (ClickedToPiece)
 				{
+					for (int i = 0; i < 8; i++)
+					{
+
+						if (whitePawns[i].sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
+						{
+							clickX = (int)mousePos.x / 100;
+							clickY = (int)mousePos.y / 100;
+							cout << "I: " << clickY << endl;
+							cout << "J: " << clickX << endl;
+							CheckBoard();
+							
+						}
+						else if (blacksPawn[i].blackPawnS.getGlobalBounds().contains(mousePos.x, mousePos.y))
+						{
+							clickX = (int)mousePos.x / 100;
+							clickY = (int)mousePos.y / 100;
+							cout << "I: " << clickY << endl;
+							cout << "J: " << clickX << endl;
+							CheckBoard();
+						}
+
+					}
 					if (blackKnightF.blackS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+		
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -914,6 +796,7 @@ public:
 					}
 					else if (blackLnightS.blackS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+					
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -923,6 +806,7 @@ public:
 					}
 					else if (blackRookF.blackRookS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+						
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -932,6 +816,7 @@ public:
 					}
 					else if (blackrookS.blackRookS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+						
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -941,6 +826,7 @@ public:
 					}
 					else if (whiterookS.rookS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+						
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -950,6 +836,7 @@ public:
 					}
 					else if (whiteRookF.rookS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+						
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -959,6 +846,7 @@ public:
 					}
 					else if (whiteKnightF.whiteS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+						
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -968,6 +856,7 @@ public:
 					}
 					else if (whiteKnightS.whiteS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+					
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -977,6 +866,7 @@ public:
 					}
 					else if (whiteKing.queenS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+						
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -985,6 +875,7 @@ public:
 					}
 					else if (blackKing.blackQuS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+						
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -994,6 +885,7 @@ public:
 					}
 					else if (whiteBishopF.whiteS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+					
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -1003,6 +895,7 @@ public:
 					}
 					else if (whiteBishopS.whiteS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+						
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -1012,6 +905,7 @@ public:
 					}
 					else if (blackBishopF.blackS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+						
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -1021,6 +915,7 @@ public:
 					}
 					else if (blackBishopS.blackS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+					
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -1030,6 +925,7 @@ public:
 					}
 					else if (blackQueen.blackS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+					
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;
@@ -1039,6 +935,7 @@ public:
 					}
 					else if (whiteQueen.whiteS.getGlobalBounds().contains(mousePos.x, mousePos.y))
 					{
+						
 						clickX = (int)mousePos.x / 100;
 						clickY = (int)mousePos.y / 100;
 						cout << "I: " << clickY << endl;

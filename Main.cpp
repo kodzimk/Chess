@@ -1,11 +1,10 @@
 #include<SFML/Graphics.hpp>
 #include"mainLoop.h"
 
-using namespace sf;
-
 int main()
 {
 	MainLoop loop;
+	loop.updateGame();
 
 	return 0;
 }

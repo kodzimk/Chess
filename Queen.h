@@ -5,6 +5,7 @@ class Queen
 public:
 	sf::Texture texture;
 	sf::Sprite queen;
+	bool isWhite;
 
 	Queen(const bool white);
 	Queen();
@@ -15,5 +16,6 @@ public:
 	void render(sf::RenderWindow* window);
 
 	const bool getGlobalBounds(sf::Vector2f pos);
+	const bool isCanMove(sf::Vector2f pos);
 };
 

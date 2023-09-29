@@ -19,7 +19,11 @@ public:
 	std::vector<Knight*> knights;
 	std::vector<Lady*> ladies;
 
-	
+
+	Queen* queen;
+	Bishop* bishop;
+	Knight* knight;
+	Lady* lady;
 	Queen* whiteQueen;
 	Queen* blackQueen;
 	King* whiteKing;
@@ -42,6 +46,7 @@ public:
 	void updateGame();
 	void render();
 	void checkForClicked();
+	void checkForEating();
 	void updateInput();
 	
 

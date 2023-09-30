@@ -19,7 +19,6 @@ public:
 	~Game();
 
 	//Functions
-	void render();
 	void update();
 	void updateGame();
 };

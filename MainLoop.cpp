@@ -211,7 +211,6 @@ void GameState::updateGame()
 			window->close();
 		this->updateInput();
 
-		this->render();
 		
 	}
 }

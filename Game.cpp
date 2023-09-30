@@ -2,8 +2,8 @@
 
 void Game::initStates()
 {
-	this->mainMenuState = nullptr;
-	this->gameState = new GameState();
+	this->mainMenuState = new MainMenuState();
+	this->gameState = nullptr;
 }
 
 Game::Game()
@@ -17,21 +17,19 @@ Game::~Game()
 	delete this->gameState;
 }
 
-void Game::render()
-{
-	if(this->gameState)
-	this->gameState->render();
-}
+
 
 void Game::update()
 {
-	if(this->gameState)
-	this->gameState->updateGame();
+		if (this->gameState)
+			this->gameState->updateGame();
+		if (this->mainMenuState)
+			this->mainMenuState->update();
 }
 
 void Game::updateGame()
 {
-	this->update();
-	this->render();
+		this->update();
+	
 }
 

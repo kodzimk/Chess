@@ -8,7 +8,7 @@ public:
 	//Variables
 	sf::Texture backTexture;
 	sf::Sprite background;
-
+	sf::RenderWindow* window;
 
 	//Initializer functions
 	void initBackGround();
@@ -18,7 +18,7 @@ public:
 
 	//Functions
 	void update();
-	void render(sf::RenderWindow* window);
+	void render();
 
 };
 

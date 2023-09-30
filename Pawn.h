@@ -1,5 +1,16 @@
 #pragma once
 #include"stdafh.h"
+#include"Queen.h"
+#include"Bishop.h"
+#include"King.h"
+#include"Knight.h"
+#include"Lady.h"
+
+class Lady;
+class Queen;
+class Bishop;
+class King;
+class Bishop;
 
 class Pawn
 {
@@ -18,5 +29,7 @@ public:
 	const bool IsCanMove(sf::Vector2f pos);
 
 	const bool getGlobalBounds(sf::Vector2f pos );
+	const std::vector<Cor*> getNextMove();
+	const bool isOpen(sf::Vector2f pos, std::vector<Knight*> knight, std::vector<Pawn*> white, std::vector<Pawn*> black, std::vector<Lady*> ladies, std::vector<Bishop*> bishops, Queen* blackQueen);
 };
 

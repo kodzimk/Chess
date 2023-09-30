@@ -3,7 +3,7 @@
 
 int main()
 {
-	MainLoop loop;
+	GameState loop;
 	loop.updateGame();
 
 	return 0;

@@ -43,12 +43,58 @@ const bool Knight::getGlobalBounds(sf::Vector2f pos)
 
 	return false;
 }
+  std::vector<Cor*> Knight::getNextCanMove()
+{
+	std::vector<Cor*> coordinates;
+	int x1 = floor(this->knight.getPosition().x)  / 100;
+	int y1 = floor(this->knight.getPosition().y)  / 100;
+
+	if (y1 + 2 < 8 && x1 + 1 < 8)
+	{
+		coordinates.push_back(new Cor(y1 + 2,x1 +1));
+	}
+	 if (y1 + 2 <8 && x1 - 1 >= 0)
+	{
+		 coordinates.push_back(new Cor(y1 + 2, x1 - 1));
+	}
+	 if (y1 - 1 >= 0 && x1 + 2 < 8)
+	{
+		 coordinates.push_back(new Cor(y1 - 1, x1 + 2));
+	
+	}
+	 if (y1 + 1 < 8 && x1 + 2 < 8)
+	{
+		 coordinates.push_back(new Cor(y1 + 1, x1 +2 ));
+	}
+
+	if (y1 + 1 < 8 && x1 - 2 >= 0)
+	{
+		coordinates.push_back(new Cor(y1 + 1, x1 - 2));
+	}
+	 if (y1 - 1 >= 0 && x1 - 2 >=0)
+	{
+		 coordinates.push_back(new Cor(y1 - 1, x1 - 2));
+	}
+	 if (y1 - 2 >=0 && x1 - 1 >=0)
+	{
+		 coordinates.push_back(new Cor(y1 - 2, x1 - 1));
+	}
+	 if (y1 - 2 >=0 && x1 + 1 < 8)
+	{
+		 coordinates.push_back(new Cor(y1 - 2, x1 + 1));
+	}
+
+
+	 return coordinates;
+}
+
 const bool Knight::isCanMove(sf::Vector2f pos)
 {
-	int x = static_cast<int>(pos.x / 100);
-	int y = static_cast<int>(pos.y / 100);
-	int x1 = static_cast<int>(this->knight.getPosition().x / 100);
-	int y1 = static_cast<int>(this->knight.getPosition().y / 100);
+	int x = floor(pos.x) / 100;
+	int y =  floor(pos.y) / 100;
+	int x1 = floor(this->knight.getPosition().x) / 100;
+	int y1 = floor(this->knight.getPosition().y) / 100;
+
 
 	if (y1 + 2 == y && x1 + 1 == x)
 	{

@@ -8,7 +8,7 @@
 #include"Knight.h"
 #include"Lady.h"
 
-class MainLoop {
+class GameState {
 
 public:
 
@@ -19,7 +19,8 @@ public:
 	std::vector<Knight*> knights;
 	std::vector<Lady*> ladies;
 
-
+	King* blackking;
+	King* king;
 	Queen* queen;
 	Bishop* bishop;
 	Knight* knight;
@@ -35,21 +36,25 @@ public:
 	sf::Vector2f mousePosView;
 
 	float gridSize;
+	bool isInChah;
+	sf::Vector2i coor;
+	bool isWhite;
 	bool isClicked;
 
 	void initPieces();
 	void initShapes();
 	void initVariables();
 
-	MainLoop();
+	GameState();
 
 	void updateGame();
 	void render();
 	void checkForClicked();
 	void checkForEating();
 	void updateInput();
+	void isKingInChah();
 	
 
 
-	~MainLoop();
+	~GameState();
 };

@@ -48,10 +48,10 @@ const bool Pawn::getGlobalBounds(sf::Vector2f pos)
 
 const bool Pawn::IsCanMove(sf::Vector2f pos)
 {
-	int x = static_cast<int>(pos.x / 100);
-	int y = static_cast<int>(pos.y / 100);
-	int x1 = static_cast<int>(this->pawn.getPosition().x / 100);
-	int y1 = static_cast<int>(this->pawn.getPosition().y / 100);
+	int x = floor(pos.x) / 100;
+	int y = floor(pos.y) / 100;
+	int x1 = this->pawn.getPosition().x / 100;
+	int y1 = this->pawn.getPosition().y / 100;
 
 	if (x == x1 && (y1 + 2 == y || y1+ 1==y)&& this->isWhite)
 	{
@@ -62,6 +62,37 @@ const bool Pawn::IsCanMove(sf::Vector2f pos)
 		return true;
 	}
 
+	return false;
+}
+
+const std::vector<Cor*> Pawn::getNextMove()
+{
+	std::vector<Cor*> coordinates;
+	int x1 = floor(this->pawn.getPosition().x) / 100;
+	int y1 = floor(this->pawn.getPosition().y) / 100;
+
+	if (y1+1 <8&&x1+1 <8 && this->isWhite)
+	{
+		coordinates.push_back(new Cor(y1 + 1, x1 + 1));
+	}
+	 if (y1 + 1 <8&&x1-1>0 && this->isWhite)
+	{
+		 coordinates.push_back(new Cor(y1 + 1, x1 - 1));
+	}
+	 if (y1 - 1 > 0 && x1 + 1 < 8 && !this->isWhite)
+	 {
+		 coordinates.push_back(new Cor(y1 - 1, x1 + 1));
+	 }
+	 if (y1 - 1 > 0 && x1 - 1 > 0 && !this->isWhite)
+	 {
+		 coordinates.push_back(new Cor(y1 - 1, x1 - 1));
+	 }
+
+	return coordinates;
+}
+
+const bool Pawn::isOpen(sf::Vector2f pos, std::vector<Knight*> knight, std::vector<Pawn*> white, std::vector<Pawn*> black, std::vector<Lady*> ladies, std::vector<Bishop*> bishops, Queen* blackQueen)
+{
 	return false;
 }
 

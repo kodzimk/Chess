@@ -1,11 +1,13 @@
 #pragma once
 #include"stdafh.h"
+#include"Knight.h"
 
 class King
 {
 public:
 	sf::Texture texture;
 	sf::Sprite king;
+	bool isWhite;
 
 	King(const bool white);
 	King();
@@ -16,5 +18,6 @@ public:
 	void render(sf::RenderWindow* window);
 
 	const bool getGlobalBounds(sf::Vector2f pos);
+	const bool IsCanMove(sf::Vector2f pos);
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 #include"stdafh.h"
 
+
 class Knight
 {
 public:
@@ -18,5 +19,6 @@ public:
 
 	const bool isCanMove(sf::Vector2f pos);
 	const bool getGlobalBounds(sf::Vector2f pos);
+	  std::vector<Cor*> getNextCanMove();
 };
 

@@ -8,3 +8,15 @@
 #include<map>
 #include<vector>
 #include<string>
+
+class Cor {
+public:
+	int x;
+	int y;
+
+	Cor(int x, int y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+};

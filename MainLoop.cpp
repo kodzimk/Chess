@@ -350,7 +350,7 @@ void GameState::checkForClicked()
 					{
 						for (size_t j = 0; j < this->knights[i]->getNextCanMove().size(); j++)
 						{
-							if (this->knights[i]->isWhite != true && this->knights[i]->getNextCanMove().at(j)->x == x && this->knights[i]->getNextCanMove().at(j)->y == y)
+							if (this->knights[i]->isWhite != true && this->knights[i]->getNextCanMove().at(j)->y == x && this->knights[i]->getNextCanMove().at(j)->x == y)
 							{
 								return;
 							}
@@ -360,7 +360,7 @@ void GameState::checkForClicked()
 					{
 						for (size_t j = 0; j < this->blackPawns[i]->getNextMove().size(); j++)
 						{
-							if (this->blackPawns[i]->getNextMove().at(j)->x == x && this->blackPawns[i]->getNextMove().at(j)->y == y)
+							if (this->blackPawns[i]->getNextMove().at(j)->y == x && this->blackPawns[i]->getNextMove().at(j)->x == y)
 							{
 								return;
 							}
@@ -379,6 +379,7 @@ void GameState::checkForClicked()
 					this->king->setPosition(this->shapes[i].getPosition());
 					this->king = nullptr;
 					this->isClicked = false;
+					this->isInChah = false;
 				}
 			}
 		}
@@ -395,7 +396,7 @@ void GameState::checkForClicked()
 						for (size_t j = 0; j < this->knights[i]->getNextCanMove().size(); j++)
 						{
 							std::cout << "KKKKK: " << this->knights[i]->getNextCanMove().at(j)->x << "  " << this->knights[i]->getNextCanMove().at(j)->y << "\n";
-							if (this->knights[i]->isWhite == true && this->knights[i]->getNextCanMove().at(j)->x == x && this->knights[i]->getNextCanMove().at(j)->y == y)
+							if (this->knights[i]->isWhite == true && this->knights[i]->getNextCanMove().at(j)->y == x && this->knights[i]->getNextCanMove().at(j)->x == y)
 							{
 								
 								return;
@@ -406,7 +407,7 @@ void GameState::checkForClicked()
 					{
 						for (size_t j = 0; j < this->whitePawns[i]->getNextMove().size(); j++)
 						{
-							if (this->whitePawns[i]->getNextMove().at(j)->x == x && this->whitePawns[i]->getNextMove().at(j)->y == y)
+							if (this->whitePawns[i]->getNextMove().at(j)->y == x && this->whitePawns[i]->getNextMove().at(j)->x == y)
 							{
 								return;
 							}
@@ -426,102 +427,109 @@ void GameState::checkForClicked()
 					this->blackking->setPosition(this->shapes[i].getPosition());
 					this->blackking = nullptr;
 					this->isClicked = false;
+					this->isInChah = false;
 				}
 			}
 		}
 	}
 	else
 	{
-		if(this->isWhite)
-	      if (this->king && this->king->IsCanMove(this->mousePosView))
+		if (this->isWhite)
 		{
-			int x = floor(this->mousePosView.x) / 100;
-			int y = floor(this->mousePosView.y) / 100;
-			std::cout << "X: " << x << " " << "Y: " << y << "\n";
-			for (int i = 0; i < this->shapes.size(); i++)
+			if (this->king && this->king->IsCanMove(this->mousePosView))
 			{
-				if (this->shapes[i].getGlobalBounds().contains(this->mousePosView))
+				int x = floor(this->mousePosView.x) / 100;
+				int y = floor(this->mousePosView.y) / 100;
+				std::cout << "X: " << x << " " << "Y: " << y << "\n";
+				for (int i = 0; i < this->shapes.size(); i++)
 				{
-					for (size_t i = 0; i < this->knights.size(); i++)
+					if (this->shapes[i].getGlobalBounds().contains(this->mousePosView))
 					{
-						for (size_t j = 0; j < this->knights[i]->getNextCanMove().size(); j++)
+						for (size_t i = 0; i < this->knights.size(); i++)
 						{
-							if (this->knights[i]->isWhite != true && this->knights[i]->getNextCanMove().at(j)->x == x && this->knights[i]->getNextCanMove().at(j)->y == y)
+							for (size_t j = 0; j < this->knights[i]->getNextCanMove().size(); j++)
 							{
-								return;
+								if (this->knights[i]->isWhite != true && this->knights[i]->getNextCanMove().at(j)->y == x && this->knights[i]->getNextCanMove().at(j)->x == y)
+								{
+									return;
+								}
 							}
 						}
-					}
-					for (int i = 0; i < this->blackPawns.size(); i++)
-					{
-						for (size_t j = 0; j < this->blackPawns[i]->getNextMove().size(); j++)
+						for (int i = 0; i < this->blackPawns.size(); i++)
 						{
-							if (this->blackPawns[i]->getNextMove().at(j)->x == x && this->blackPawns[i]->getNextMove().at(j)->y == y)
+							for (size_t j = 0; j < this->blackPawns[i]->getNextMove().size(); j++)
 							{
-								return;
+								if (this->blackPawns[i]->getNextMove().at(j)->y == x && this->blackPawns[i]->getNextMove().at(j)->x == y)
+								{
+									return;
+								}
 							}
 						}
-					}
-					for (int i = 0; i < this->ladies.size(); i++)
-					{
-						for (size_t j = 0; j < this->ladies[i]->getNextMove().size(); j++)
+						for (int i = 0; i < this->ladies.size(); i++)
 						{
-							if (this->ladies[i]->isWhite != true && this->ladies[i]->getNextMove().at(j)->x == x && this->ladies[i]->getNextMove().at(j)->y == y)
+							for (size_t j = 0; j < this->ladies[i]->getNextMove().size(); j++)
 							{
-								return;
+								if (this->ladies[i]->isWhite != true && this->ladies[i]->getNextMove().at(j)->y == x && this->ladies[i]->getNextMove().at(j)->x == y)
+								{
+									return;
+								}
 							}
 						}
+						this->king->setPosition(this->shapes[i].getPosition());
+						this->king = nullptr;
+						this->isClicked = false;
+						this->isInChah = false;
 					}
-					this->king->setPosition(this->shapes[i].getPosition());
-					this->king = nullptr;
-					this->isClicked = false;
 				}
 			}
 		}
 		else
-		 if (this->blackking && this->blackking->IsCanMove(this->mousePosView))
-		{
-			int x = floor(this->mousePosView.x) / 100;
-			int y = floor(this->mousePosView.y) / 100;
-			std::cout << "X: " << x << " " << "Y: " << y << "\n";
-			for (int i = 0; i < this->shapes.size(); i++)
+		{ 
+			if (this->blackking && this->blackking->IsCanMove(this->mousePosView))
 			{
-				if (this->shapes[i].getGlobalBounds().contains(this->mousePosView))
+				int x = floor(this->mousePosView.x) / 100;
+				int y = floor(this->mousePosView.y) / 100;
+				std::cout << "X: " << x << " " << "Y: " << y << "\n";
+				for (int i = 0; i < this->shapes.size(); i++)
 				{
-					for (size_t i = 0; i < this->knights.size(); i++)
+					if (this->shapes[i].getGlobalBounds().contains(this->mousePosView))
 					{
-						for (size_t j = 0; j < this->knights[i]->getNextCanMove().size(); j++)
+						/*for (size_t i = 0; i < this->knights.size(); i++)
 						{
-							if (this->knights[i]->isWhite == true && this->knights[i]->getNextCanMove().at(j)->x == x && this->knights[i]->getNextCanMove().at(j)->y == y)
+							for (size_t j = 0; j < this->knights[i]->getNextCanMove().size(); j++)
 							{
-								return;
+								if (this->knights[i]->isWhite == true && this->knights[i]->getNextCanMove().at(j)->x == x && this->knights[i]->getNextCanMove().at(j)->y == y)
+								{
+									return;
+								}
 							}
 						}
-					}
-					for (int i = 0; i < this->whitePawns.size(); i++)
-					{
-						for (size_t j = 0; j < this->whitePawns[i]->getNextMove().size(); j++)
+						for (int i = 0; i < this->whitePawns.size(); i++)
 						{
-							if (this->whitePawns[i]->getNextMove().at(j)->x == x && this->whitePawns[i]->getNextMove().at(j)->y == y)
+							for (size_t j = 0; j < this->whitePawns[i]->getNextMove().size(); j++)
 							{
-								return;
+								if (this->whitePawns[i]->getNextMove().at(j)->x == x && this->whitePawns[i]->getNextMove().at(j)->y == y)
+								{
+									return;
+								}
+							}
+						}*/
+						for (int i = 0; i < this->ladies.size(); i++)
+						{
+							for (size_t j = 0; j < this->ladies[i]->getNextMove().size(); j++)
+							{
+								if (this->ladies[i]->isWhite == true && this->ladies[i]->getNextMove().at(j)->y == x && this->ladies[i]->getNextMove().at(j)->x == y)
+								{
+									return;
+								}
 							}
 						}
-					}
-					for (int i = 0; i < this->ladies.size(); i++)
-					{
-						for (size_t j = 0; j < this->ladies[i]->getNextMove().size(); j++)
-						{
-							if (this->ladies[i]->isWhite == true && this->ladies[i]->getNextMove().at(j)->x == x && this->ladies[i]->getNextMove().at(j)->y == y)
-							{
-								return;
-							}
-						}
-					}
 
-					this->blackking->setPosition(this->shapes[i].getPosition());
-					this->blackking = nullptr;
-					this->isClicked = false;
+						this->blackking->setPosition(this->shapes[i].getPosition());
+						this->blackking = nullptr;
+						this->isClicked = false;
+						this->isInChah = false;
+					}
 				}
 			}
 		}
@@ -1153,7 +1161,11 @@ void GameState::updateInput()
 			else
 			{
 				if (this->blackKing->getGlobalBounds(this->mousePosView))
+				{
 					this->blackking = this->blackKing;
+					std::cout << "PROBLEMMMMM" << "\n";
+				}
+
 			}
 		}
 	}
@@ -1174,7 +1186,7 @@ void GameState::isKingInChah() {
 	coor.x = floor(this->whiteKing->getPositon().x) / 100;
 	coor.y = floor(this->whiteKing->getPositon().y) / 100;
 
-	std::cout << "I: " << coor.x << "  " << coor.y << "\n";
+	
 
 	for (int i = 0; i < this->knights.size(); i++)
 	{
@@ -1201,14 +1213,12 @@ void GameState::isKingInChah() {
 	{
 		if (bishops[i]->isWhite != true)
 		{
+			std::vector<Cor*> coorDinates;
 			for (int j = 0; j < this->bishops[i]->getNextMove().size(); j++)
 			{
+				coorDinates = this->bishops[i]->getNextMove();
 
-
-				int x = floor(this->bishops[i]->getNextMove().at(j)->x) / 100;
-				int y = floor(this->bishops[i]->getNextMove().at(j)->y) / 100;
-
-				if (coor.x == x && coor.y == y)
+				if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
 				{
 					isInChah = true;
 					isWhite = true;
@@ -1221,34 +1231,40 @@ void GameState::isKingInChah() {
 
 	for (int i = 0; i < this->ladies.size(); i++)
 	{
-		for (int j = 0; j < this->ladies[i]->getNextMove().size(); j++)
-		{
-			if (ladies[i]->isWhite != true)
-			{
-				int x = floor(this->ladies[i]->getPositon().x) / 100;
-				int y = floor(this->ladies[i]->getPositon().y) / 100;
 
-				if (coor.x == x && coor.y == y)
+		if (ladies[i]->isWhite != true)
+		{
+			std::vector<Cor*> coorDinates;
+			for (int j = 0; j < this->ladies[i]->getNextMove().size(); j++)
+			{
+				coorDinates = this->ladies[i]->getNextMove();
+
+				if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
 				{
+
 					isInChah = true;
 					isWhite = true;
 					return;
 				}
+
 			}
 		}
 	}
 	for (int i = 0; i < this->blackPawns.size(); i++)
 	{
+		std::vector<Cor*> coorDinates;
 		for (int j = 0; j < this->blackPawns[i]->getNextMove().size(); j++)
 		{
-				int x = floor(this->blackPawns[i]->getPositon().x) / 100;
-				int y = floor(this->blackPawns[i]->getPositon().y) / 100;
-				if (coor.x == x && coor.y == y)
-				{
-					isWhite = true;
-					isInChah = true;
-					return;
-				}
+				
+			coorDinates = this->blackPawns[i]->getNextMove();
+
+			if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
+			{
+
+				isInChah = true;
+				isWhite = true;
+				return;
+			}
 			
 		}
 	}
@@ -1268,72 +1284,79 @@ void GameState::isKingInChah() {
 
 	for (int i = 0; i < this->knights.size(); i++)
 	{
-		for (int j = 0; j < this->knights[i]->getNextCanMove().size(); j++)
+		if (knights[i]->isWhite == true)
 		{
-
-			if (ladies[i]->isWhite == true)
+			std::vector<Cor*> coorDinates;
+			for (int j = 0; j < this->knights[i]->getNextCanMove().size(); j++)
 			{
-				int x = floor(this->knights[i]->getPositon().x) / 100;
-				int y = floor(this->knights[i]->getPositon().y) / 100;
+				coorDinates = this->knights[i]->getNextCanMove();
 
-				if (coor.x == x && coor.y == y)
+				if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
 				{
+
 					isInChah = true;
-					isWhite = false;
+					isWhite = true;
 					return;
 				}
+				std::cout << "A: " << coorDinates[j]->x << "  " << coorDinates[j]->y << "\n";
 			}
 		}
 	}
 
 	for (int i = 0; i < this->bishops.size(); i++)
 	{
-		for (int j = 0; j < this->bishops[i]->getNextMove().size(); j++)
+		if (bishops[i]->isWhite == true)
 		{
-
-			if (bishops[i]->isWhite == true)
+			std::vector<Cor*> coorDinates;
+			for (int j = 0; j < this->bishops[i]->getNextMove().size(); j++)
 			{
-				int x = floor(this->bishops[i]->getPositon().x) / 100;
-				int y = floor(this->bishops[i]->getPositon().y) / 100;
+				coorDinates = this->bishops[i]->getNextMove();
 
-				if (coor.x == x && coor.y == y)
+				if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
 				{
+
 					isInChah = true;
 					isWhite = false;
 					return;
 				}
+
 			}
 		}
 	}
 
 	for (int i = 0; i < this->ladies.size(); i++)
 	{
-		for (int j = 0; j < this->ladies[i]->getNextMove().size(); j++)
-		{
-			if (ladies[i]->isWhite == true)
-			{
-				int x = floor(this->ladies[i]->getPositon().x) / 100;
-				int y = floor(this->ladies[i]->getPositon().y) / 100;
 
-				if (coor.x == x && coor.y == y)
+		if (ladies[i]->isWhite == true)
+		{
+			std::vector<Cor*> coorDinates;
+			for (int j = 0; j < this->ladies[i]->getNextMove().size(); j++)
+			{
+				coorDinates = this->ladies[i]->getNextMove();
+
+				if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
 				{
 					isInChah = true;
 					isWhite = false;
 					return;
 				}
+
 			}
 		}
 	}
+
 	for (int i = 0; i < this->whitePawns.size(); i++)
 	{
+		std::vector<Cor*> coorDinates;
 		for (int j = 0; j < this->whitePawns[i]->getNextMove().size(); j++)
 		{
-			int x = floor(this->whitePawns[i]->getPositon().x) / 100;
-			int y = floor(this->whitePawns[i]->getPositon().y) / 100;
-			if (coor.x == x && coor.y == y)
+
+			coorDinates = this->whitePawns[i]->getNextMove();
+
+			if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
 			{
-				isWhite = false;
 				isInChah = true;
+				isWhite = false;
 				return;
 			}
 

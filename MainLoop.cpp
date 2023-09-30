@@ -127,6 +127,9 @@ void GameState::initShapes()
 
 void GameState::initVariables()
 {
+	this->whiteCount = 16;
+	this->blackCount = 16;
+	this->whiteMove = true;
 	this->count = 0;
 	this->isClicked = false;
 	this->mousePosView = sf::Vector2f();
@@ -137,8 +140,8 @@ void GameState::initVariables()
 
 GameState::GameState()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode(800, 800), "Chess");
-
+	
+	this->window = new sf::RenderWindow(sf::VideoMode(800, 800), "chess");
 	this->initVariables();
 	this->initPieces();
 	this->initShapes();
@@ -204,6 +207,8 @@ void GameState::updateGame()
 
 		this->mousePosView = sf::Vector2f(sf::Mouse::getPosition(*window));
 		
+		if (endGame())
+			window->close();
 		this->updateInput();
 
 		this->render();
@@ -265,13 +270,17 @@ void GameState::checkForClicked()
 					this->pawn = nullptr;
 					this->isClicked = false;
 					this->isKingInChah();
-
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					break;
 				}
 
 			}
 		}
-		else if (this->lady && this->lady->IsOpen(this->mousePosView, this->knights, this->whitePawns, this->blackPawns, this->ladies, this->bishops, this->blackQueen) && this->lady->isCanMove(this->mousePosView))
+		else if (this->lady && this->lady->IsOpen(this->mousePosView, this->knights, this->whitePawns, this->blackPawns, this->ladies, this->bishops, this->blackQueen)
+			&& this->lady->isCanMove(this->mousePosView))
 		{
 			for (int i = 0; i < this->shapes.size(); i++)
 			{
@@ -282,6 +291,10 @@ void GameState::checkForClicked()
 					this->lady = nullptr;
 					this->isClicked = false;
 						this->isKingInChah();
+						if (this->whiteMove)
+							this->whiteMove = false;
+						else
+							this->whiteMove = true;
 					break;
 				}
 
@@ -297,6 +310,10 @@ void GameState::checkForClicked()
 					this->knight->setPosition(this->shapes[i].getPosition());
 					this->knight = nullptr;
 					this->isClicked = false;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->isKingInChah();
 					break;
 				}
@@ -314,6 +331,10 @@ void GameState::checkForClicked()
 					this->bishop->setPosition(this->shapes[i].getPosition());
 					this->bishop = nullptr;
 					this->isClicked = false;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->isKingInChah();
 					break;
 				}
@@ -331,6 +352,10 @@ void GameState::checkForClicked()
 					this->queen->setPosition(this->shapes[i].getPosition());
 					this->queen = nullptr;
 					this->isClicked = false;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->isKingInChah();
 					break;
 				}
@@ -350,7 +375,7 @@ void GameState::checkForClicked()
 					{
 						for (size_t j = 0; j < this->knights[i]->getNextCanMove().size(); j++)
 						{
-							if (this->knights[i]->isWhite != true && this->knights[i]->getNextCanMove().at(j)->y == x && this->knights[i]->getNextCanMove().at(j)->x == y)
+							if (this->knights[i]->isWhite != true && this->knights[i]->getNextCanMove().at(j)->x == x && this->knights[i]->getNextCanMove().at(j)->y == y)
 							{
 								return;
 							}
@@ -360,7 +385,7 @@ void GameState::checkForClicked()
 					{
 						for (size_t j = 0; j < this->blackPawns[i]->getNextMove().size(); j++)
 						{
-							if (this->blackPawns[i]->getNextMove().at(j)->y == x && this->blackPawns[i]->getNextMove().at(j)->x == y)
+							if (this->blackPawns[i]->getNextMove().at(j)->x == x && this->blackPawns[i]->getNextMove().at(j)->y == y)
 							{
 								return;
 							}
@@ -380,6 +405,10 @@ void GameState::checkForClicked()
 					this->king = nullptr;
 					this->isClicked = false;
 					this->isInChah = false;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 				}
 			}
 		}
@@ -396,7 +425,7 @@ void GameState::checkForClicked()
 						for (size_t j = 0; j < this->knights[i]->getNextCanMove().size(); j++)
 						{
 							std::cout << "KKKKK: " << this->knights[i]->getNextCanMove().at(j)->x << "  " << this->knights[i]->getNextCanMove().at(j)->y << "\n";
-							if (this->knights[i]->isWhite == true && this->knights[i]->getNextCanMove().at(j)->y == x && this->knights[i]->getNextCanMove().at(j)->x == y)
+							if (this->knights[i]->isWhite == true && this->knights[i]->getNextCanMove().at(j)->y == y && this->knights[i]->getNextCanMove().at(j)->x == x)
 							{
 								
 								return;
@@ -407,7 +436,7 @@ void GameState::checkForClicked()
 					{
 						for (size_t j = 0; j < this->whitePawns[i]->getNextMove().size(); j++)
 						{
-							if (this->whitePawns[i]->getNextMove().at(j)->y == x && this->whitePawns[i]->getNextMove().at(j)->x == y)
+							if (this->whitePawns[i]->getNextMove().at(j)->x == x && this->whitePawns[i]->getNextMove().at(j)->y == y)
 							{
 								return;
 							}
@@ -417,7 +446,7 @@ void GameState::checkForClicked()
 					{
 						for (size_t j = 0; j < this->ladies[i]->getNextMove().size(); j++)
 						{
-							if (this->ladies[i]->isWhite == true && this->ladies[i]->getNextMove().at(j)->x == x && this->ladies[i]->getNextMove().at(j)->y == y)
+							if (this->ladies[i]->isWhite == true && this->ladies[i]->getNextMove().at(j)->x == x && this->ladies[i]->getNextMove().at(j)->y== y)
 							{
 								return;
 							}
@@ -428,6 +457,10 @@ void GameState::checkForClicked()
 					this->blackking = nullptr;
 					this->isClicked = false;
 					this->isInChah = false;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 				}
 			}
 		}
@@ -449,7 +482,7 @@ void GameState::checkForClicked()
 						{
 							for (size_t j = 0; j < this->knights[i]->getNextCanMove().size(); j++)
 							{
-								if (this->knights[i]->isWhite != true && this->knights[i]->getNextCanMove().at(j)->y == x && this->knights[i]->getNextCanMove().at(j)->x == y)
+								if (this->knights[i]->isWhite != true && this->knights[i]->getNextCanMove().at(j)->x == x && this->knights[i]->getNextCanMove().at(j)->y == y)
 								{
 									return;
 								}
@@ -459,7 +492,7 @@ void GameState::checkForClicked()
 						{
 							for (size_t j = 0; j < this->blackPawns[i]->getNextMove().size(); j++)
 							{
-								if (this->blackPawns[i]->getNextMove().at(j)->y == x && this->blackPawns[i]->getNextMove().at(j)->x == y)
+								if (this->blackPawns[i]->getNextMove().at(j)->x == x && this->blackPawns[i]->getNextMove().at(j)->y == y)
 								{
 									return;
 								}
@@ -469,7 +502,7 @@ void GameState::checkForClicked()
 						{
 							for (size_t j = 0; j < this->ladies[i]->getNextMove().size(); j++)
 							{
-								if (this->ladies[i]->isWhite != true && this->ladies[i]->getNextMove().at(j)->y == x && this->ladies[i]->getNextMove().at(j)->x == y)
+								if (this->ladies[i]->isWhite != true && this->ladies[i]->getNextMove().at(j)->x == x && this->ladies[i]->getNextMove().at(j)->y == y)
 								{
 									return;
 								}
@@ -479,6 +512,10 @@ void GameState::checkForClicked()
 						this->king = nullptr;
 						this->isClicked = false;
 						this->isInChah = false;
+						if (this->whiteMove)
+							this->whiteMove = false;
+						else
+							this->whiteMove = true;
 					}
 				}
 			}
@@ -494,7 +531,7 @@ void GameState::checkForClicked()
 				{
 					if (this->shapes[i].getGlobalBounds().contains(this->mousePosView))
 					{
-						/*for (size_t i = 0; i < this->knights.size(); i++)
+						for (size_t i = 0; i < this->knights.size(); i++)
 						{
 							for (size_t j = 0; j < this->knights[i]->getNextCanMove().size(); j++)
 							{
@@ -508,17 +545,17 @@ void GameState::checkForClicked()
 						{
 							for (size_t j = 0; j < this->whitePawns[i]->getNextMove().size(); j++)
 							{
-								if (this->whitePawns[i]->getNextMove().at(j)->x == x && this->whitePawns[i]->getNextMove().at(j)->y == y)
+								if (this->whitePawns[i]->getNextMove().at(j)->x ==x && this->whitePawns[i]->getNextMove().at(j)->y == y)
 								{
 									return;
 								}
 							}
-						}*/
+						}
 						for (int i = 0; i < this->ladies.size(); i++)
 						{
 							for (size_t j = 0; j < this->ladies[i]->getNextMove().size(); j++)
 							{
-								if (this->ladies[i]->isWhite == true && this->ladies[i]->getNextMove().at(j)->y == x && this->ladies[i]->getNextMove().at(j)->x == y)
+								if (this->ladies[i]->isWhite == true && this->ladies[i]->getNextMove().at(j)->x == x && this->ladies[i]->getNextMove().at(j)->y == y)
 								{
 									return;
 								}
@@ -529,6 +566,10 @@ void GameState::checkForClicked()
 						this->blackking = nullptr;
 						this->isClicked = false;
 						this->isInChah = false;
+						if (this->whiteMove)
+							this->whiteMove = false;
+						else
+							this->whiteMove = true;
 					}
 				}
 			}
@@ -556,41 +597,66 @@ void GameState::checkForEating()
 
 				if (this->bishop && this->bishop->isCanMove(this->blackPawns[i]->getPositon()))
 				{
-				
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					bishop->setPosition(this->blackPawns[i]->getPositon());
 					this->blackPawns[i]->pawn.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->king && this->king->IsCanMove(this->blackPawns[i]->getPositon()))
 				{
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					king->setPosition(this->blackPawns[i]->getPositon());
 					this->blackPawns[i]->pawn.setScale(sf::Vector2f(0, 0));
 					this->isInChah = false;
 				}
 				else if (this->pawn && this->pawn->IsCanMove(this->blackPawns[i]->getPositon()))
 				{
-					
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->pawn->setPosition(this->blackPawns[i]->getPositon());
 					this->blackPawns[i]->pawn.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->knight && this->knight->isCanMove(this->blackPawns[i]->getPositon()))
 				{
-					
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->knight->setPosition(this->blackPawns[i]->getPositon());
 					this->blackPawns[i]->pawn.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->lady && this->lady->isCanMove(this->blackPawns[i]->getPositon()))
 				{
-					
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->lady->setPosition(this->blackPawns[i]->getPositon());
 					this->blackPawns[i]->pawn.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->queen && this->queen->isCanMove(this->blackPawns[i]->getPositon()))
 				{
-					
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->queen->setPosition(this->blackPawns[i]->getPositon());
 					this->blackPawns[i]->pawn.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
@@ -611,44 +677,69 @@ void GameState::checkForEating()
 				((this->pawn && this->pawn->isWhite != true) || (this->lady && this->lady->isWhite != true) ||
 					(this->bishop && this->bishop->isWhite != true) || (this->knight && this->knight->isWhite != true) || (this->queen && this->queen->isWhite != true)||(this->blackking)))
 			{
-				std::cout << "EATEN" << "\n";
+	
 				if (this->bishop && this->bishop->isCanMove(this->whitePawns[i]->getPositon()))
 				{
-				
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					bishop->setPosition(this->whitePawns[i]->getPositon());
 					this->whitePawns[i]->pawn.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->blackking && this->blackking->IsCanMove(this->whitePawns[i]->getPositon()))
 				{
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->isInChah = false;
 					this->blackking->setPosition(this->whitePawns[i]->getPositon());
 					this->whitePawns[i]->pawn.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->pawn && this->pawn->IsCanMove(this->whitePawns[i]->getPositon()))
 				{
-				
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->pawn->setPosition(this->whitePawns[i]->getPositon());
 					this->whitePawns[i]->pawn.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->knight && this->knight->isCanMove(this->whitePawns[i]->getPositon()))
 				{
-				
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->knight->setPosition(this->whitePawns[i]->getPositon());
 					this->whitePawns[i]->pawn.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->lady && this->lady->isCanMove(this->whitePawns[i]->getPositon()))
 				{
-					
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->lady->setPosition(this->whitePawns[i]->getPositon());
 					this->whitePawns[i]->pawn.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->queen && this->queen->isCanMove(this->whitePawns[i]->getPositon()))
 				{
-					
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->queen->setPosition(this->whitePawns[i]->getPositon());
 					this->whitePawns[i]->pawn.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
@@ -664,42 +755,70 @@ void GameState::checkForEating()
 			}
 
 		}
-		/*for (int i = 0; i < this->ladies.size(); i++)
+		for (int i = 0; i < this->ladies.size(); i++)
 		{
-			if (this->lady->IsOpen(this->mousePosView, this->knights, this->whitePawns, this->blackPawns, this->ladies, this->bishops, this->blackQueen) && 
-				this->ladies[i]->getGlobalBounds(this->mousePosView) && 
-				((this->pawn && this->pawn->isWhite != true) || (this->lady->isWhite != true) ||
+			if (this->lady && this->ladies[i]->getGlobalBounds(this->mousePosView) && ((this->pawn && this->pawn->isWhite != true) || (this->lady->isWhite != true) ||
 					(this->bishop && this->bishop->isWhite != true) || (this->knight && this->knight->isWhite != true) || (this->queen && this->queen->isWhite != true)||(this->blackking)))
 			{
-				std::cout << "EATEN" << "\n";
+
 				if (this->bishop && this->bishop->isCanMove(this->ladies[i]->getPositon()))
 				{
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					bishop->setPosition(this->ladies[i]->getPositon());
 					this->ladies[i]->lady.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->pawn && this->pawn->IsCanMove(this->ladies[i]->getPositon()))
 				{
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->pawn->setPosition(this->ladies[i]->getPositon());
 					this->ladies[i]->lady.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->blackking && this->blackking->IsCanMove(this->ladies[i]->getPositon()))
 				{
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->isInChah = false;
 					this->blackking->setPosition(this->ladies[i]->getPositon());
 					this->ladies[i]->lady.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->knight && this->knight->isCanMove(this->ladies[i]->getPositon()))
 				{
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->knight->setPosition(this->ladies[i]->getPositon());
 					this->ladies[i]->lady.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->lady && this->lady->isCanMove(this->ladies[i]->getPositon()))
 				{
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->lady->setPosition(this->ladies[i]->getPositon());
 					this->ladies[i]->lady.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->queen && this->queen->isCanMove(this->ladies[i]->getPositon()))
 				{
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->queen->setPosition(this->ladies[i]->getPositon());
 					this->ladies[i]->lady.setScale(sf::Vector2f(0, 0));
 				}
@@ -713,40 +832,68 @@ void GameState::checkForEating()
 
 			}
 
-			else if (this->lady->IsOpen(this->mousePosView, this->knights, this->whitePawns, this->blackPawns, this->ladies, this->bishops, this->blackQueen) && this->ladies[i]->getGlobalBounds(this->mousePosView) &&
-				((this->pawn && this->pawn->isWhite == true) || (this->lady && this->lady->isWhite == true) ||
+			else if (this->lady && this->ladies[i]->getGlobalBounds(this->mousePosView) &&	((this->pawn && this->pawn->isWhite == true) || (this->lady && this->lady->isWhite == true) ||
 					(this->bishop && this->bishop->isWhite == true) || (this->knight && this->knight->isWhite == true) || (this->queen && this->queen->isWhite == true)||(this->king)))
 			{
-				std::cout << "EATEN" << "\n";
 
 				if (this->bishop && this->bishop->isCanMove(this->ladies[i]->getPositon()))
 				{
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					bishop->setPosition(this->ladies[i]->getPositon());
 					this->ladies[i]->lady.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->king && this->king->IsCanMove(this->ladies[i]->getPositon()))
 				{
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->isInChah = false;
 					this->king->setPosition(this->ladies[i]->getPositon());
 					this->ladies[i]->lady.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->pawn && this->pawn->IsCanMove(this->ladies[i]->getPositon()))
 				{
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->pawn->setPosition(this->ladies[i]->getPositon());
 					this->ladies[i]->lady.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->knight && this->knight->isCanMove(this->ladies[i]->getPositon()))
 				{
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->knight->setPosition(this->ladies[i]->getPositon());
 					this->ladies[i]->lady.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->lady && this->lady->isCanMove(this->ladies[i]->getPositon()))
 				{
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->lady->setPosition(this->ladies[i]->getPositon());
 					this->ladies[i]->lady.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->queen && this->queen->isCanMove(this->ladies[i]->getPositon()))
 				{
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->queen->setPosition(this->ladies[i]->getPositon());
 					this->ladies[i]->lady.setScale(sf::Vector2f(0, 0));
 				}
@@ -758,50 +905,76 @@ void GameState::checkForEating()
 				this->queen = nullptr;
 				this->knight = nullptr;
 			}
-		}*/
+		}
 		for (int i = 0; i < this->knights.size(); i++)
 		{
 			if (this->knights[i]->getGlobalBounds(this->mousePosView) &&
 				((this->pawn && this->pawn->isWhite != true) || (this->lady && this->lady->isWhite != true) ||
 					(this->bishop && this->bishop->isWhite != true) || (this->knight && this->knight->isWhite != true) || (this->queen && this->queen->isWhite != true)||(this->blackking)))
 			{
-				std::cout << "EATEN" << "\n";
+				
 				if (this->bishop && this->bishop->isCanMove(this->knights[i]->getPositon()))
 				{
-					
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					bishop->setPosition(this->knights[i]->getPositon());
 					this->knights[i]->knight.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->pawn && this->pawn->IsCanMove(this->knights[i]->getPositon()))
 				{
-				
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->pawn->setPosition(this->knights[i]->getPositon());
 					this->knights[i]->knight.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->blackking && this->blackking->IsCanMove(this->knights[i]->getPositon()))
 				{
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->isInChah = false;
 					this->blackking->setPosition(this->knights[i]->getPositon());
 					this->knights[i]->knight.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->knight && this->knight->isCanMove(this->knights[i]->getPositon()))
 				{
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->knight->setPosition(this->knights[i]->getPositon());
 					this->knights[i]->knight.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->lady && this->lady->isCanMove(this->knights[i]->getPositon()))
 				{
-					
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->lady->setPosition(this->knights[i]->getPositon());
 					this->knights[i]->knight.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->queen && this->queen->isCanMove(this->knights[i]->getPositon()))
 				{
-				
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->queen->setPosition(this->knights[i]->getPositon());
 					this->knights[i]->knight.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
@@ -820,44 +993,70 @@ void GameState::checkForEating()
 				((this->pawn && this->pawn->isWhite == true) || (this->lady && this->lady->isWhite == true) ||
 					(this->bishop && this->bishop->isWhite == true) || (this->knight && this->knight->isWhite == true) || (this->queen && this->queen->isWhite == true)||(this->king)))
 			{
-				std::cout << "EATEN" << "\n";
+				
 
 				if (this->bishop && this->bishop->isCanMove(this->knights[i]->getPositon()))
 				{
-					
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					bishop->setPosition(this->knights[i]->getPositon());
 					this->knights[i]->knight.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->king && this->king->IsCanMove(this->knights[i]->getPositon()))
 				{
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->isInChah = false;
 					this->king->setPosition(this->knights[i]->getPositon());
 					this->knights[i]->knight.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->pawn && this->pawn->IsCanMove(this->knights[i]->getPositon()))
 				{
-					
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->pawn->setPosition(this->knights[i]->getPositon());
 					this->knights[i]->knight.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->knight && this->knight->isCanMove(this->knights[i]->getPositon()))
 				{
-				
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->knight->setPosition(this->knights[i]->getPositon());
 					this->knights[i]->knight.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->lady && this->lady->isCanMove(this->knights[i]->getPositon()))
 				{
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->lady->setPosition(this->knights[i]->getPositon());
 					this->knights[i]->knight.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->queen && this->queen->isCanMove(this->knights[i]->getPositon()))
 				{
-					
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->queen->setPosition(this->knights[i]->getPositon());
 					this->knights[i]->knight.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
@@ -878,43 +1077,68 @@ void GameState::checkForEating()
 				((this->pawn && this->pawn->isWhite != true) || (this->lady && this->lady->isWhite != true) ||
 					(this->bishop && this->bishop->isWhite != true) || (this->knight && this->knight->isWhite != true) || (this->queen && this->queen->isWhite != true)||(this->blackking)))
 			{
-				std::cout << "EATEN" << "\n";
+				
 				if (this->bishop && this->bishop->isCanMove(this->bishops[i]->getPositon()))
 				{
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					bishop->setPosition(this->bishops[i]->getPositon());
 					this->bishops[i]->bishop.setScale(sf::Vector2f(0, 0));
 				}
 				else if (this->blackking && this->blackking->IsCanMove(this->bishops[i]->getPositon()))
 				{
-					
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->blackking->setPosition(this->bishops[i]->getPositon());
 					this->bishops[i]->bishop.setScale(sf::Vector2f(0, 0));
 					this->isInChah = false;
 				}
 				else if (this->pawn && this->pawn->IsCanMove(this->bishops[i]->getPositon()))
 				{
-					
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->pawn->setPosition(this->bishops[i]->getPositon());
 					this->bishops[i]->bishop.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->knight && this->knight->isCanMove(this->bishops[i]->getPositon()))
 				{
-					
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->knight->setPosition(this->bishops[i]->getPositon());
 					this->bishops[i]->bishop.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->lady && this->lady->isCanMove(this->bishops[i]->getPositon()))
 				{
-				
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->lady->setPosition(this->bishops[i]->getPositon());
 					this->bishops[i]->bishop.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->queen && this->queen->isCanMove(this->bishops[i]->getPositon()))
 				{
-					
+					this->whiteCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->queen->setPosition(this->bishops[i]->getPositon());
 					this->bishops[i]->bishop.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
@@ -934,45 +1158,70 @@ void GameState::checkForEating()
 				((this->pawn && this->pawn->isWhite == true) || (this->lady && this->lady->isWhite == true) ||
 					(this->bishop && this->bishop->isWhite == true) || (this->knight && this->knight->isWhite == true) || (this->queen && this->queen->isWhite == true)||(this->king)))
 			{
-				std::cout << "EATEN" << "\n";
+				
 				if (this->bishop && this->bishop->isCanMove(this->bishops[i]->getPositon()))
 				{
-				
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					bishop->setPosition(this->bishops[i]->getPositon());
 					this->bishops[i]->bishop.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->pawn && this->pawn->IsCanMove(this->bishops[i]->getPositon()))
 				{
-				
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
+
 					this->pawn->setPosition(this->bishops[i]->getPositon());
 					this->bishops[i]->bishop.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->king && this->king->IsCanMove(this->bishops[i]->getPositon()))
 				{
-					
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->king->setPosition(this->bishops[i]->getPositon());
 					this->bishops[i]->bishop.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->knight && this->knight->isCanMove(this->bishops[i]->getPositon()))
 				{
-				
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->knight->setPosition(this->bishops[i]->getPositon());
 					this->bishops[i]->bishop.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->lady && this->lady->isCanMove(this->bishops[i]->getPositon()))
 				{
-					
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->lady->setPosition(this->bishops[i]->getPositon());
 					this->bishops[i]->bishop.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
 				}
 				else if (this->queen && this->queen->isCanMove(this->bishops[i]->getPositon()))
 				{
-					
+					this->blackCount--;
+					if (this->whiteMove)
+						this->whiteMove = false;
+					else
+						this->whiteMove = true;
 					this->queen->setPosition(this->bishops[i]->getPositon());
 					this->bishops[i]->bishop.setScale(sf::Vector2f(0, 0));
 					this->isKingInChah();
@@ -990,41 +1239,61 @@ void GameState::checkForEating()
 
 	if (!isInChah)
 	{
-		if (this->queen && this->queen->isOpen(this->mousePosView, this->knights, this->whitePawns, this->blackPawns, this->ladies, this->bishops, this->blackQueen) && this->whiteQueen->getGlobalBounds(this->mousePosView) &&
+		if (this->queen &&  this->whiteQueen->getGlobalBounds(this->mousePosView) &&
 			((this->pawn && this->pawn->isWhite != true) || (this->lady && this->lady->isWhite != true) ||
-				(this->bishop && this->bishop->isWhite != true) || (this->knight && this->knight->isWhite != true) || (this->queen && this->queen->isWhite != true)))
+				(this->bishop && this->bishop->isWhite != true) || (this->knight && this->knight->isWhite != true) || (this->queen && this->queen->isWhite != true)||(this->blackking)))
 		{
-			if (this->bishop && this->bishop->isCanMove(this->whiteQueen->getPositon()))
+			if (this->blackking && this->bishop->isCanMove(this->whiteQueen->getPositon()))
 			{
-		
-				bishop->setPosition(this->whiteQueen->getPositon());
+				this->whiteCount--;
+				if (this->whiteMove)
+					this->whiteMove = false;
+				else
+					this->whiteMove = true;
+				blackking->setPosition(this->whiteQueen->getPositon());
 				this->whiteQueen->queen.setScale(sf::Vector2f(0, 0));
 				this->isKingInChah();
 			}
 			else if (this->pawn && this->pawn->IsCanMove(this->whiteQueen->getPositon()))
 			{
-			
+				this->whiteCount--;
+				if (this->whiteMove)
+					this->whiteMove = false;
+				else
+					this->whiteMove = true;
 				this->pawn->setPosition(this->whiteQueen->getPositon());
 				this->whiteQueen->queen.setScale(sf::Vector2f(0, 0));
 				this->isKingInChah();
 			}
 			else if (this->knight && this->knight->isCanMove(this->whiteQueen->getPositon()))
 			{
-				
+				this->whiteCount--;
+				if (this->whiteMove)
+					this->whiteMove = false;
+				else
+					this->whiteMove = true;
 				this->knight->setPosition(this->whiteQueen->getPositon());
 				this->whiteQueen->queen.setScale(sf::Vector2f(0, 0));
 				this->isKingInChah();
 			}
 			else if (this->lady && this->lady->isCanMove(this->whiteQueen->getPositon()))
 			{
-				
+				this->whiteCount--;
+				if (this->whiteMove)
+					this->whiteMove = false;
+				else
+					this->whiteMove = true;
 				this->lady->setPosition(this->whiteQueen->getPositon());
 				this->whiteQueen->queen.setScale(sf::Vector2f(0, 0));
 				this->isKingInChah();
 			}
 			else if (this->queen && this->queen->isCanMove(this->whiteQueen->getPositon()))
 			{
-				
+				this->whiteCount--;
+				if (this->whiteMove)
+					this->whiteMove = false;
+				else
+					this->whiteMove = true;
 				this->queen->setPosition(this->whiteQueen->getPositon());
 				this->whiteQueen->queen.setScale(sf::Vector2f(0, 0));
 				this->isKingInChah();
@@ -1039,41 +1308,73 @@ void GameState::checkForEating()
 
 		}
 
-		else if (this->blackQueen && this->blackQueen->isOpen(this->mousePosView, this->knights, this->whitePawns, this->blackPawns, this->ladies, this->bishops, this->whiteQueen) && this->blackQueen->getGlobalBounds(this->mousePosView) &&
+		else if (this->blackQueen && 
+			this->blackQueen->getGlobalBounds(this->mousePosView) &&
 			((this->pawn && this->pawn->isWhite == true) || (this->lady && this->lady->isWhite == true) ||
-				(this->bishop && this->bishop->isWhite == true) || (this->knight && this->knight->isWhite == true) || (this->queen && this->queen->isWhite == true)))
+				(this->bishop && this->bishop->isWhite == true) || (this->knight && this->knight->isWhite == true) || (this->queen && this->queen->isWhite == true)||(this->king)))
 		{
 			if (this->bishop && this->bishop->isCanMove(this->blackQueen->getPositon()))
 			{
-			
+				this->blackCount--;
+				if (this->whiteMove)
+					this->whiteMove = false;
+				else
+					this->whiteMove = true;
 				bishop->setPosition(this->blackQueen->getPositon());
+				this->blackQueen->queen.setScale(sf::Vector2f(0, 0));
+				this->isKingInChah();
+			}
+			else if (this->king && this->king->IsCanMove(this->blackQueen->getPositon()))
+			{
+				this->blackCount--;
+				if (this->whiteMove)
+					this->whiteMove = false;
+				else
+					this->whiteMove = true;
+				king->setPosition(this->blackQueen->getPositon());
 				this->blackQueen->queen.setScale(sf::Vector2f(0, 0));
 				this->isKingInChah();
 			}
 			else if (this->pawn && this->pawn->IsCanMove(this->blackQueen->getPositon()))
 			{
-				
+				this->blackCount--;
+				if (this->whiteMove)
+					this->whiteMove = false;
+				else
+					this->whiteMove = true;
 				this->pawn->setPosition(this->blackQueen->getPositon());
 				this->blackQueen->queen.setScale(sf::Vector2f(0, 0));
 				this->isKingInChah();
 			}
 			else if (this->knight && this->knight->isCanMove(this->blackQueen->getPositon()))
 			{
-				
+				this->blackCount--;
+				if (this->whiteMove)
+					this->whiteMove = false;
+				else
+					this->whiteMove = true;
 				this->knight->setPosition(this->blackQueen->getPositon());
 				this->blackQueen->queen.setScale(sf::Vector2f(0, 0));
 				this->isKingInChah();
 			}
 			else if (this->lady && this->lady->isCanMove(this->blackQueen->getPositon()))
 			{
-				
+				this->blackCount--;
+				if (this->whiteMove)
+					this->whiteMove = false;
+				else
+					this->whiteMove = true;
 				this->lady->setPosition(this->blackQueen->getPositon());
 				this->blackQueen->queen.setScale(sf::Vector2f(0, 0));
 				this->isKingInChah();
 			}
 			else if (this->queen && this->queen->isCanMove(this->blackQueen->getPositon()))
 			{
-				
+				this->blackCount--;
+				if (this->whiteMove)
+					this->whiteMove = false;
+				else
+					this->whiteMove = true;
 				this->queen->setPosition(this->blackQueen->getPositon());
 				this->blackQueen->queen.setScale(sf::Vector2f(0, 0));
 				this->isKingInChah();
@@ -1096,59 +1397,89 @@ void GameState::updateInput()
 	{
 		if (!this->isInChah)
 		{
-			for (int i = 0; i < this->whitePawns.size(); i++)
+			if (this->whiteMove)
 			{
+				for (int i = 0; i < this->whitePawns.size(); i++)
+				{
 
-				if (this->whitePawns[i]->getGlobalBounds(this->mousePosView))
-				{
-					this->pawn = this->whitePawns[i];
-					this->isClicked = true;
-				}
-
-			}
-			for (int i = 0; i < this->blackPawns.size(); i++)
-			{
-				if (this->blackPawns[i]->getGlobalBounds(this->mousePosView))
-				{
-					this->pawn = this->blackPawns[i];
-					this->isClicked = true;
-				}
-			}
-			for (int i = 0; i < this->ladies.size(); i++)
-			{
-				if (this->ladies[i]->getGlobalBounds(this->mousePosView))
-				{
-					this->lady = this->ladies[i];
-					this->isClicked = true;
-				}
-			}
-			for (int i = 0; i < this->knights.size(); i++)
-			{
-				if (this->knights[i]->getGlobalBounds(this->mousePosView))
-				{
-					this->knight = this->knights[i];
-					this->isClicked = true;
+					if (this->whitePawns[i]->getGlobalBounds(this->mousePosView))
+					{
+						this->pawn = this->whitePawns[i];
+						this->isClicked = true;
+					}
 
 				}
-			}
-			for (int i = 0; i < this->bishops.size(); i++)
-			{
-				if (this->bishops[i]->getGlobalBounds(this->mousePosView))
+				for (int i = 0; i < this->ladies.size(); i++)
 				{
-					this->bishop = this->bishops[i];
-					this->isClicked = true;
+					if (this->ladies[i]->getGlobalBounds(this->mousePosView) && this->ladies[i]->isWhite == true)
+					{
+						this->lady = this->ladies[i];
+						this->isClicked = true;
+					}
 				}
-			}
-			if (this->blackQueen->getGlobalBounds(this->mousePosView))
-				this->queen = this->blackQueen;
-			else if (this->whiteQueen->getGlobalBounds(this->mousePosView))
-				this->queen = this->whiteQueen;
+				for (int i = 0; i < this->knights.size(); i++)
+				{
+					if (this->knights[i]->getGlobalBounds(this->mousePosView) && this->knights[i]->isWhite == true)
+					{
+						this->knight = this->knights[i];
+						this->isClicked = true;
 
-				if (this->whiteKing->getGlobalBounds(this->mousePosView))
-					this->king = this->whiteKing;
-		
+					}
+				}
+				for (int i = 0; i < this->bishops.size(); i++)
+				{
+					if (this->bishops[i]->getGlobalBounds(this->mousePosView)&&this->bishops[i]->isWhite == true)
+					{
+						this->bishop = this->bishops[i];
+						this->isClicked = true;
+					}
+				}
+				 if (this->whiteQueen->getGlobalBounds(this->mousePosView))
+					this->queen = this->whiteQueen;
+				 if (this->whiteKing->getGlobalBounds(this->mousePosView))
+					 this->king = this->whiteKing;
+			}
+			else
+			{
+				for (int i = 0; i < this->ladies.size(); i++)
+				{
+					if (this->ladies[i]->getGlobalBounds(this->mousePosView) && this->ladies[i]->isWhite != true)
+					{
+						this->lady = this->ladies[i];
+						this->isClicked = true;
+					}
+				}
+				for (int i = 0; i < this->knights.size(); i++)
+				{
+					if (this->knights[i]->getGlobalBounds(this->mousePosView) && this->knights[i]->isWhite != true)
+					{
+						this->knight = this->knights[i];
+						this->isClicked = true;
+
+					}
+				}
+				for (int i = 0; i < this->bishops.size(); i++)
+				{
+					if (this->bishops[i]->getGlobalBounds(this->mousePosView) && this->bishops[i]->isWhite != true)
+					{
+						this->bishop = this->bishops[i];
+						this->isClicked = true;
+					}
+				}
+				for (int i = 0; i < this->blackPawns.size(); i++)
+				{
+					if (this->blackPawns[i]->getGlobalBounds(this->mousePosView))
+					{
+						this->pawn = this->blackPawns[i];
+						this->isClicked = true;
+					}
+				}
+
+				if (this->blackQueen->getGlobalBounds(this->mousePosView))
+					this->queen = this->blackQueen;
 				if (this->blackKing->getGlobalBounds(this->mousePosView))
 					this->blackking = this->blackKing;
+			}
 			
 		}
 		else
@@ -1197,7 +1528,7 @@ void GameState::isKingInChah() {
 			{
 				coorDinates = this->knights[i]->getNextCanMove();
 
-				if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
+				if (coor.x == coorDinates[j]->x && coor.y == coorDinates[j]->y)
 				{
 					
 					isInChah = true;
@@ -1218,7 +1549,8 @@ void GameState::isKingInChah() {
 			{
 				coorDinates = this->bishops[i]->getNextMove();
 
-				if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
+				if (this->bishops[i]->ISOpen(this->whiteKing->getPositon(), this->knights, this->whitePawns, this->blackPawns, this->ladies, this->bishops, this->blackQueen)&&
+					coor.x == coorDinates[j]->x && coor.y == coorDinates[j]->y)
 				{
 					isInChah = true;
 					isWhite = true;
@@ -1239,9 +1571,9 @@ void GameState::isKingInChah() {
 			{
 				coorDinates = this->ladies[i]->getNextMove();
 
-				if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
+				if (this->ladies[i]->IsOpen(this->whiteKing->getPositon(),this->knights,this->whitePawns,this->blackPawns,this->ladies,this->bishops,this->blackQueen)
+					&& coor.x == coorDinates[j]->x && coor.y == coorDinates[j]->y)
 				{
-
 					isInChah = true;
 					isWhite = true;
 					return;
@@ -1258,7 +1590,7 @@ void GameState::isKingInChah() {
 				
 			coorDinates = this->blackPawns[i]->getNextMove();
 
-			if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
+			if (coor.x == coorDinates[j]->x && coor.y == coorDinates[j]->y)
 			{
 
 				isInChah = true;
@@ -1271,7 +1603,7 @@ void GameState::isKingInChah() {
 
 	int x = floor(this->blackQueen->getPositon().x) / 100;
 	int y = floor(this->blackQueen->getPositon().y) / 100;
-	if (x == coor.x && y == coor.y)
+	if (this->blackQueen->isOpen(this->whiteKing->getPositon(), this->knights, this->whitePawns, this->blackPawns, this->ladies, this->bishops, this->blackQueen)&&x == coor.x && y == coor.y)
 	{
 		isInChah = true;
 		isWhite = true;
@@ -1291,14 +1623,14 @@ void GameState::isKingInChah() {
 			{
 				coorDinates = this->knights[i]->getNextCanMove();
 
-				if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
+				if (coor.x == coorDinates[j]->x && coor.y == coorDinates[j]->y)
 				{
 
 					isInChah = true;
 					isWhite = true;
 					return;
 				}
-				std::cout << "A: " << coorDinates[j]->x << "  " << coorDinates[j]->y << "\n";
+		
 			}
 		}
 	}
@@ -1312,7 +1644,8 @@ void GameState::isKingInChah() {
 			{
 				coorDinates = this->bishops[i]->getNextMove();
 
-				if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
+				if (this->bishops[i]->ISOpen(this->whiteKing->getPositon(), this->knights, this->whitePawns, this->blackPawns, this->ladies, this->bishops, this->blackQueen)&&
+					coor.x == coorDinates[j]->x && coor.y == coorDinates[j]->y)
 				{
 
 					isInChah = true;
@@ -1334,7 +1667,8 @@ void GameState::isKingInChah() {
 			{
 				coorDinates = this->ladies[i]->getNextMove();
 
-				if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
+				if (this->ladies[i]->IsOpen(this->whiteKing->getPositon(), this->knights, this->whitePawns, this->blackPawns, this->ladies, this->bishops, this->blackQueen)&&
+					coor.x == coorDinates[j]->x && coor.y == coorDinates[j]->y)
 				{
 					isInChah = true;
 					isWhite = false;
@@ -1353,7 +1687,7 @@ void GameState::isKingInChah() {
 
 			coorDinates = this->whitePawns[i]->getNextMove();
 
-			if (coor.x == coorDinates[j]->y && coor.y == coorDinates[j]->x)
+			if (coor.x == coorDinates[j]->x && coor.y == coorDinates[j]->y)
 			{
 				isInChah = true;
 				isWhite = false;
@@ -1365,11 +1699,25 @@ void GameState::isKingInChah() {
 
 	x = floor(this->whiteQueen->getPositon().x) / 100;
     y = floor(this->whiteQueen->getPositon().y) / 100;
-	if (x == coor.x && y == coor.y)
+	if (this->whiteQueen->isOpen(this->whiteKing->getPositon(), this->knights, this->whitePawns, this->blackPawns, this->ladies, this->bishops, this->blackQueen)&&x == coor.x && y == coor.y)
 	{
 		isInChah = true;
 		isWhite = false;
 		return;
 	}
 
+}
+
+bool GameState::endGame()
+{
+	if (this->blackCount <= 1)
+	{
+		return true;
+	}
+	else if (this->whiteCount <= 1)
+	{
+		return true;
+	}
+
+	return false;
 }

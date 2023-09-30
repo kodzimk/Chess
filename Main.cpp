@@ -1,10 +1,10 @@
 #include<SFML/Graphics.hpp>
-#include"mainLoop.h"
+#include"Game.h"
 
 int main()
 {
-	GameState loop;
-	loop.updateGame();
+	Game game;
+	game.updateGame();
 
 	return 0;
 }

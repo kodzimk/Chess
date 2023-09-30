@@ -14,7 +14,7 @@ public:
 	int x;
 	int y;
 
-	Cor(int x, int y)
+	Cor(int y, int x)
 	{
 		this->x = x;
 		this->y = y;

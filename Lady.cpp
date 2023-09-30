@@ -199,6 +199,7 @@ const bool Lady::IsOpen(sf::Vector2f pos, std::vector<Knight*> knight, std::vect
 		{
 			int x2 = floor(knight[i]->getPositon().x) / 100;
 			int y2 = floor(knight[i]->getPositon().y) / 100;
+
 			if (y2 == y && x2 < x && x1 < x2)
 				return false;
 		}
@@ -206,14 +207,14 @@ const bool Lady::IsOpen(sf::Vector2f pos, std::vector<Knight*> knight, std::vect
 		{
 			int x2 = floor(white[i]->getPositon().x) / 100;
 			int y2 = floor(white[i]->getPositon().y) / 100;
-			if (y2 == y && x2 < x && x1 < x2)
+			if (y2 == y1 && x2 < x && x1 < x2)
 				return false;
 		}
 		for (size_t i = 0; i < black.size(); i++)
 		{
 			int x2 = floor(black[i]->getPositon().x) / 100;
 			int y2 = floor(black[i]->getPositon().y) / 100;
-			if (y2 == y && x2 < x && x1 < x2)
+			if (y2 == y1 && x2 < x && x1 < x2)
 				return false;
 		}
 		for (size_t i = 0; i < ladies.size(); i++)
@@ -238,7 +239,7 @@ const bool Lady::IsOpen(sf::Vector2f pos, std::vector<Knight*> knight, std::vect
 
 		for (int i = 0; i < 8; i++)
 		{
-			if (x + i == x1)
+			if (x1 + i == x)
 			{
 				return true;
 			}
@@ -347,5 +348,5 @@ const bool Lady::IsOpen(sf::Vector2f pos, std::vector<Knight*> knight, std::vect
 		}
 	}
 
-	return true;
+	return false;
 }

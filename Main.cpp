@@ -4,7 +4,7 @@
 int main()
 {
 	Game game;
-	game.updateGame();
+	game.update();
 
 	return 0;
 }

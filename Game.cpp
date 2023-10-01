@@ -21,15 +21,19 @@ Game::~Game()
 
 void Game::update()
 {
+
+		if (this->mainMenuState)
+		{
+			this->mainMenuState->update();
+			if (this->mainMenuState->updateText() && this->mainMenuState->isPressed)
+			{
+				this->gameState = new GameState();
+				mainMenuState = nullptr;
+			}
+
+		}
 		if (this->gameState)
 			this->gameState->updateGame();
-		if (this->mainMenuState)
-			this->mainMenuState->update();
 }
 
-void Game::updateGame()
-{
-		this->update();
-	
-}
 

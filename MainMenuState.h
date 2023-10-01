@@ -14,6 +14,8 @@ public:
 	sf::Text quitText;
 	bool isPressed;
 	sf::Vector2f mousePosView;
+	sf::SoundBuffer sound;
+	sf::Sound buffer;
 
 	//Initializer functions
 	void initBackGround();

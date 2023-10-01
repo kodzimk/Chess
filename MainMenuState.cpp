@@ -31,6 +31,9 @@ MainMenuState::MainMenuState()
 	this->initBackGround();
 	this->initGui();
 	this->isPressed = false;
+	this->sound.loadFromFile("Resources/Sounds/world_clear.wav");
+	this->buffer.setBuffer(sound);
+	this->buffer.play();
 }
 
 MainMenuState::~MainMenuState()
